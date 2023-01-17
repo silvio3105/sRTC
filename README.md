@@ -10,7 +10,7 @@ Example applications are available at `examples` folder. All examples are made f
 
 | MCU				| Supported		|
 | -----------		| -----------	|
-| STM32L051xx		| IWDG			|
+| STM32L051xx		| RTC			|
 
 # License
 
