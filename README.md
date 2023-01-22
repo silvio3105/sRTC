@@ -1,7 +1,7 @@
 
 # Simple RTC
 
-Soon!
+This is real time clock driver written in C++ for STM32 & nRF52 MCUs. Driver is developing by DIY project(s) needs.
 
 Driver documentation is available at `.docs/html/index.html`.
 Example applications are available at `examples` folder. All examples are made for STM32.
