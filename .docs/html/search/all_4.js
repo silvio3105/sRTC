@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['format_5f24h_0',['FORMAT_24H',['../group___s_t_m32_l051.html#gga124114d956e520e14e3c92b516fddc51ac6d00e790210cc73eebc349ffe3cbfde',1,'sRTC.h']]]
+  ['get_0',['get',['../classs_r_t_c.html#a30d5f69c8865e813a8a64d215acb40b3',1,'sRTC::get(uint8_t &amp;day, uint8_t &amp;month, uint8_t &amp;year, sRTC_day_t &amp;weekDay, uint8_t &amp;hour, uint8_t &amp;minute, uint8_t &amp;second, sRTC_ampm_t &amp;ampm) const'],['../classs_r_t_c.html#a6142c7952b3dc4f3405c4814f46e8aca',1,'sRTC::get(sRTC_time_t &amp;time) const']]]
 ];

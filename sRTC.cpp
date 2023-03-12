@@ -153,7 +153,31 @@ void sRTC::get(uint8_t& day, uint8_t& month, uint8_t& year, sRTC_day_t& weekDay,
 	year = getYear(value);
 }
 
-void sRTC::enableWakeup(sRTC_WUT_clock_t clock, uint16_t reloadValue)
+void sRTC::wakeupStart(uint16_t reloadValue)
+{
+	// Disable RTC backup register write protection
+	disableBackupWP();
+
+	// Disable write protection
+	disableWP();
+
+	// Set wake up reload value
+	handle->WUTR = reloadValue - 1;
+
+	// Clear interrupt flag
+	handle->ISR &= ~RTC_ISR_WUTF;
+
+	// Enable wake up timer
+	handle->CR |= RTC_CR_WUTE;
+
+	// Enable RTC write protection
+	enableWP();
+
+	// Enable RTC backup register write protection
+	enableBackupWP();	
+}
+
+void sRTC::wakeupEnable(sRTC_WUT_clock_t clock)
 {
 	// Disable RTC backup register write protection
 	disableBackupWP();
@@ -170,9 +194,6 @@ void sRTC::enableWakeup(sRTC_WUT_clock_t clock, uint16_t reloadValue)
 	// Clear wake up write interrupt flag
 	handle->ISR &= ~RTC_ISR_WUTWF;
 
-	// Set wake up reload value
-	handle->WUTR = reloadValue - 1;
-
 	// Clear wake up timer clock prescaler
 	handle->CR &= ~RTC_CR_WUCKSEL;
 
@@ -188,17 +209,14 @@ void sRTC::enableWakeup(sRTC_WUT_clock_t clock, uint16_t reloadValue)
 	// Enable wake up from RTC
 	PWR->CSR |= PWR_CSR_WUF;
 
-	// Enable wake up timer
-	handle->CR |= RTC_CR_WUTE;
-
 	// Enable RTC write protection
 	enableWP();
 
 	// Enable RTC backup register write protection
-	enableBackupWP();	
+	enableBackupWP();		
 }
 
-void sRTC::disableWakeup(void)
+void sRTC::wakeupDisable(void)
 {
 	// Disable RTC backup register write protection
 	disableBackupWP();
@@ -217,6 +235,51 @@ void sRTC::disableWakeup(void)
 
 	// Enable RTC backup register write protection
 	enableBackupWP();	
+}
+
+void sRTC::calibrate(sRTC_cal_dir_t direction, uint16_t value, sRTC_cal_cycle_t cycle)
+{
+	uint8_t calp = 0;
+	uint32_t calCycle = 0;
+
+	// Disable RTC backup register write protection
+	disableBackupWP();
+
+	// Disable write protection
+	disableWP();
+
+	// Enable init phase
+	enableInit();	
+
+	// Set CALP bit
+	if (direction == sRTC_cal_dir_t::RTC_CAL_POSITIVE) calp = 1;
+
+	// Set cycle bit and limit first two bits
+	if (cycle == sRTC_cal_cycle_t::RTC_CAL_16S)
+	{
+		calCycle = RTC_CALR_CALW16;
+		value &= ~1;
+	}
+	else if (cycle == sRTC_cal_cycle_t::RTC_CAL_8S)
+	{
+		calCycle = RTC_CALR_CALW8;
+		value &= ~3;
+	}
+
+	// Wait until it is allowed to do calibration
+	while (handle->ISR & RTC_ISR_RECALPF);
+
+	// Set CALR register
+	handle->CALR = 0 | (calp << RTC_CALR_CALP_Pos) | value | calCycle;
+
+	// Disable init phase
+	disableInit();
+
+	// Enable RTC write protection
+	enableWP();
+
+	// Enable RTC backup register write protection
+	enableBackupWP();		
 }
 
 

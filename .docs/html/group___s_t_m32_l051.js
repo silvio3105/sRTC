@@ -13,14 +13,16 @@ var group___s_t_m32_l051 =
     [ "sRTC", "classs_r_t_c.html", [
       [ "sRTC", "classs_r_t_c.html#a64a97f5f63c463b86a4cf9e51400757c", null ],
       [ "~sRTC", "classs_r_t_c.html#a9479626c243de0c4ef4756df8711ec39", null ],
-      [ "disableWakeup", "classs_r_t_c.html#a56cb1a0f465e1e56900bf9a964f1c6e6", null ],
-      [ "enableWakeup", "classs_r_t_c.html#ae246a40171f537bb2171377646b79e38", null ],
+      [ "calibrate", "classs_r_t_c.html#af6d8ca6836a7ffe62fbf3f5befc99109", null ],
       [ "get", "classs_r_t_c.html#a6142c7952b3dc4f3405c4814f46e8aca", null ],
       [ "get", "classs_r_t_c.html#a30d5f69c8865e813a8a64d215acb40b3", null ],
       [ "init", "classs_r_t_c.html#a2d64c250a5be2a6481fe368792ced815", null ],
       [ "isSet", "classs_r_t_c.html#a280e900ebd2261174169bcc47a3a120e", null ],
       [ "set", "classs_r_t_c.html#a6c7ed14734b710ee97cd0cce3720d15f", null ],
-      [ "set", "classs_r_t_c.html#a9b22551f8934daf997e63eb1fb26da99", null ]
+      [ "set", "classs_r_t_c.html#a9b22551f8934daf997e63eb1fb26da99", null ],
+      [ "wakeupDisable", "classs_r_t_c.html#ad5ea8c0fed24200aceab265ee43bb52d", null ],
+      [ "wakeupEnable", "classs_r_t_c.html#aacc34748bd5063444bef4c9c9b45ea74", null ],
+      [ "wakeupStart", "classs_r_t_c.html#a07c5d2eea55235eab4d8f62ae5043a79", null ]
     ] ],
     [ "RTC_WPR_RST", "group___s_t_m32_l051.html#gabf88a2a98cebd864839533c711d1143b", null ],
     [ "RTC_WPR_VAL1", "group___s_t_m32_l051.html#ga7b1cf29e8f01922ad59acb1c1dc1b775", null ],
@@ -28,6 +30,15 @@ var group___s_t_m32_l051 =
     [ "sRTC_ampm_t", "group___s_t_m32_l051.html#ga7e0be127844f914499e2d596b703bd26", [
       [ "AM", "group___s_t_m32_l051.html#gga7e0be127844f914499e2d596b703bd26a6b42f038a5963a2f1038abfb71f79109", null ],
       [ "PM", "group___s_t_m32_l051.html#gga7e0be127844f914499e2d596b703bd26a4e84ba06a563492b48e6b6e25dd85c2d", null ]
+    ] ],
+    [ "sRTC_cal_cycle_t", "group___s_t_m32_l051.html#gac8d46bbcdb2a602236515e1f49bc245c", [
+      [ "RTC_CAL_32S", "group___s_t_m32_l051.html#ggac8d46bbcdb2a602236515e1f49bc245cac60e912256ba8a38e1176ee64670c5b0", null ],
+      [ "RTC_CAL_16S", "group___s_t_m32_l051.html#ggac8d46bbcdb2a602236515e1f49bc245ca88014f7d5c6a80b30fdbb02986ffba4b", null ],
+      [ "RTC_CAL_8S", "group___s_t_m32_l051.html#ggac8d46bbcdb2a602236515e1f49bc245cac826ec26dbb198c3de3b17b925d19446", null ]
+    ] ],
+    [ "sRTC_cal_dir_t", "group___s_t_m32_l051.html#ga6a1941b79d1c56e223ad7ce159b7f07e", [
+      [ "RTC_CAL_NEGATIVE", "group___s_t_m32_l051.html#gga6a1941b79d1c56e223ad7ce159b7f07eab6121e09d113ff871b93b2fc5421d953", null ],
+      [ "RTC_CAL_POSITIVE", "group___s_t_m32_l051.html#gga6a1941b79d1c56e223ad7ce159b7f07eac00ea0e7cbbd4ad313c98e4a36659d65", null ]
     ] ],
     [ "sRTC_day_t", "group___s_t_m32_l051.html#gad0dda29812d725058aa738275ac5a89f", null ],
     [ "sRTC_mode_t", "group___s_t_m32_l051.html#ga00bcef9c8414b144d1d6e950ec41fab4", [

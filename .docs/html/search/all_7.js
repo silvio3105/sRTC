@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['init_0',['init',['../classs_r_t_c.html#a2d64c250a5be2a6481fe368792ced815',1,'sRTC']]],
-  ['isset_1',['isSet',['../classs_r_t_c.html#a280e900ebd2261174169bcc47a3a120e',1,'sRTC']]]
+  ['minute_0',['minute',['../structs_r_t_c__time__t.html#a86db266fe3f0b1b58af72214087c3a59',1,'sRTC_time_t']]],
+  ['month_1',['month',['../structs_r_t_c__time__t.html#a75f000f54095f64268d8fe175c746967',1,'sRTC_time_t']]]
 ];

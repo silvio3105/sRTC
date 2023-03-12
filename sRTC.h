@@ -106,6 +106,25 @@ enum sRTC_WUT_clock_t : uint8_t {
 	CK_SPRE = 0b100 /**< @brief ~1Hz tick. */
 };
 
+/**
+ * @brief RTC calibration direction enum.
+ * 
+ */
+enum sRTC_cal_dir_t : uint8_t {
+	RTC_CAL_NEGATIVE = 0, /**< @brief Remove RTC clocks. */
+	RTC_CAL_POSITIVE = 1 /**< @brief Add RTC clocks. */
+};
+
+/**
+ * @brief RTC calibration cycle period enum.
+ * 
+ */
+enum sRTC_cal_cycle_t : uint8_t {
+	RTC_CAL_32S = 0, /**< @brief 32s calibration cycle period. */
+	RTC_CAL_16S, /**< @brief 16s calibration cycle period. */
+	RTC_CAL_8S /**< @brief 8s calibration cycle period. */
+};
+
 
 // ----- STRUCTS
 /**
@@ -215,32 +234,49 @@ class sRTC {
 	}
 
 	/**
-	 * @brief Enable wake up timer.
+	 * @brief Start wake up timer.
 	 * 
-	 * @param clock Input clock prescaler. See \ref sRTC_WUT_clock_t
 	 * @param reloadValue Wake up timer reload value.
 	 * @return No return value.
 	 */
-	void enableWakeup(sRTC_WUT_clock_t clock, uint16_t reloadValue);
+	void wakeupStart(uint16_t reloadValue);
+
+	/**
+	 * @brief Enable wake up timer.
+	 * 
+	 * @param clock Input clock prescaler. See \ref sRTC_WUT_clock_t
+	 * @return No return value.
+	 */
+	void wakeupEnable(sRTC_WUT_clock_t clock);
 
 	/**
 	 * @brief Disable wake up timer.
 	 * 
 	 * @return No return value.
 	 */
-	void disableWakeup(void);
+	void wakeupDisable(void);
 
 	/**
 	 * @brief Is RTC configured.
 	 * 
 	 * @return \c 0 if RTC is not configured.
-	 * @return\c 1 if RTC is configured. 
+	 * @return \c 1 if RTC is configured. 
 	 */
 	inline uint8_t isSet(void) const
 	{
 		// Return INITS bit
 		return (handle->ISR & RTC_ISR_INITS);
 	}
+
+	/**
+	 * @brief Calibrate RTC LSE clock.
+	 * 
+	 * @param direction Calibration direction. See \ref sRTC_cal_dir_t
+	 * @param value RTC calibration value.
+	 * @param cycle RTC calibration cycle period. Optional. See \ref sRTC_cal_cycle_t  
+	 * @return No return value.
+	 */
+	void calibrate(sRTC_cal_dir_t direction, uint16_t value, sRTC_cal_cycle_t cycle = sRTC_cal_cycle_t::RTC_CAL_32S);
 
 
 	// PRIVATE STUFF

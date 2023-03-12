@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['weekday_0',['weekDay',['../structs_r_t_c__time__t.html#a4aa0c23f0d62f7cfebfaff96ade9f5fb',1,'sRTC_time_t']]]
+  ['year_0',['year',['../structs_r_t_c__time__t.html#ad9c91b527fc23116697c20925e34a881',1,'sRTC_time_t']]]
 ];

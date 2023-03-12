@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Simple RTC<span id="projectnumber">&#160;v1.0r1</span>
+   <div id="projectname">Simple RTC<span id="projectnumber">&#160;v1.0r2</span>
    </div>
    <div id="projectbrief">Simple RTC driver written in C++ for STM32 &amp; nRF52</div>
   </td>
@@ -229,7 +229,7 @@ $(document).ready(function(){initNavTree('s_r_t_c_8cpp_source.html',''); initRes
 <div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    year = getYear(value);</div>
 <div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>}</div>
 <div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span> </div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno"><a class="line" href="classs_r_t_c.html#ae246a40171f537bb2171377646b79e38">  156</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classs_r_t_c.html#ae246a40171f537bb2171377646b79e38">sRTC::enableWakeup</a>(<a class="code hl_enumeration" href="group___s_t_m32_l051.html#ga43f26c46ff4bcdd7da07bd33df89385d">sRTC_WUT_clock_t</a> clock, uint16_t reloadValue)</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno"><a class="line" href="classs_r_t_c.html#a07c5d2eea55235eab4d8f62ae5043a79">  156</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classs_r_t_c.html#a07c5d2eea55235eab4d8f62ae5043a79">sRTC::wakeupStart</a>(uint16_t reloadValue)</div>
 <div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>{</div>
 <div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    <span class="comment">// Disable RTC backup register write protection</span></div>
 <div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    disableBackupWP();</div>
@@ -237,169 +237,236 @@ $(document).ready(function(){initNavTree('s_r_t_c_8cpp_source.html',''); initRes
 <div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    <span class="comment">// Disable write protection</span></div>
 <div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    disableWP();</div>
 <div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span> </div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    <span class="comment">// Disable wake up timer</span></div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    handle-&gt;CR &amp;= ~(RTC_CR_WUTE);</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    <span class="comment">// Set wake up reload value</span></div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    handle-&gt;WUTR = reloadValue - 1;</div>
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span> </div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    <span class="comment">// Wait for write flag to set</span></div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>    <span class="keywordflow">while</span> (!(handle-&gt;ISR &amp; RTC_ISR_WUTWF));</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    <span class="comment">// Clear interrupt flag</span></div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>    handle-&gt;ISR &amp;= ~RTC_ISR_WUTF;</div>
 <div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    <span class="comment">// Clear wake up write interrupt flag</span></div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    handle-&gt;ISR &amp;= ~RTC_ISR_WUTWF;</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    <span class="comment">// Enable wake up timer</span></div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    handle-&gt;CR |= RTC_CR_WUTE;</div>
 <div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>    <span class="comment">// Set wake up reload value</span></div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>    handle-&gt;WUTR = reloadValue - 1;</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>    <span class="comment">// Enable RTC write protection</span></div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>    enableWP();</div>
 <div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span> </div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    <span class="comment">// Clear wake up timer clock prescaler</span></div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    handle-&gt;CR &amp;= ~RTC_CR_WUCKSEL;</div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span> </div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>    <span class="comment">// Set wake up timer clock prescaler</span></div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>    handle-&gt;CR |= clock;</div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span> </div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>    <span class="comment">// Clear interrupt flag</span></div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    handle-&gt;ISR &amp;= ~RTC_ISR_WUTF;</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    <span class="comment">// Enable RTC backup register write protection</span></div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    enableBackupWP();   </div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>}</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span> </div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno"><a class="line" href="classs_r_t_c.html#aacc34748bd5063444bef4c9c9b45ea74">  180</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classs_r_t_c.html#aacc34748bd5063444bef4c9c9b45ea74">sRTC::wakeupEnable</a>(<a class="code hl_enumeration" href="group___s_t_m32_l051.html#ga43f26c46ff4bcdd7da07bd33df89385d">sRTC_WUT_clock_t</a> clock)</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>{</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>    <span class="comment">// Disable RTC backup register write protection</span></div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    disableBackupWP();</div>
 <div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span> </div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    <span class="comment">// Enable wake up timer interrupt</span></div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    handle-&gt;CR |= RTC_CR_WUTIE;</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    <span class="comment">// Disable write protection</span></div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    disableWP();</div>
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span> </div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>    <span class="comment">// Enable wake up from RTC</span></div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    PWR-&gt;CSR |= PWR_CSR_WUF;</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>    <span class="comment">// Disable wake up timer</span></div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    handle-&gt;CR &amp;= ~(RTC_CR_WUTE);</div>
 <div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span> </div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    <span class="comment">// Enable wake up timer</span></div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    handle-&gt;CR |= RTC_CR_WUTE;</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    <span class="comment">// Wait for write flag to set</span></div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    <span class="keywordflow">while</span> (!(handle-&gt;ISR &amp; RTC_ISR_WUTWF));</div>
 <div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span> </div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    <span class="comment">// Enable RTC write protection</span></div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>    enableWP();</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    <span class="comment">// Clear wake up write interrupt flag</span></div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>    handle-&gt;ISR &amp;= ~RTC_ISR_WUTWF;</div>
 <div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span> </div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>    <span class="comment">// Enable RTC backup register write protection</span></div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>    enableBackupWP();   </div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>}</div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span> </div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno"><a class="line" href="classs_r_t_c.html#a56cb1a0f465e1e56900bf9a964f1c6e6">  201</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classs_r_t_c.html#a56cb1a0f465e1e56900bf9a964f1c6e6">sRTC::disableWakeup</a>(<span class="keywordtype">void</span>)</div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>{</div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    <span class="comment">// Disable RTC backup register write protection</span></div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    disableBackupWP();</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>    <span class="comment">// Clear wake up timer clock prescaler</span></div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>    handle-&gt;CR &amp;= ~RTC_CR_WUCKSEL;</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span> </div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>    <span class="comment">// Set wake up timer clock prescaler</span></div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>    handle-&gt;CR |= clock;</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span> </div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    <span class="comment">// Clear interrupt flag</span></div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    handle-&gt;ISR &amp;= ~RTC_ISR_WUTF;</div>
 <div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    <span class="comment">// Disable write protection</span></div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    disableWP();</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    <span class="comment">// Enable wake up timer interrupt</span></div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    handle-&gt;CR |= RTC_CR_WUTIE;</div>
 <div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span> </div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    <span class="comment">// Disable wake up timer and its interrupt</span></div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>    handle-&gt;CR &amp;= ~(RTC_CR_WUTE | RTC_CR_WUTIE);</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    <span class="comment">// Enable wake up from RTC</span></div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>    PWR-&gt;CSR |= PWR_CSR_WUF;</div>
 <div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span> </div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>    <span class="comment">// Reset wake up timer counter</span></div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>    handle-&gt;WUTR = 0;</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>    <span class="comment">// Enable RTC write protection</span></div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>    enableWP();</div>
 <div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span> </div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    <span class="comment">// Enable RTC write protection</span></div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>    enableWP();</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span> </div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>    <span class="comment">// Enable RTC backup register write protection</span></div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>    enableBackupWP();   </div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>}</div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span> </div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span> </div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span><span class="comment">// ----- PRIVATE METHOD DEFINITIONS</span></div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span><span class="keywordtype">void</span> sRTC::setDate(uint8_t day, uint8_t month, uint8_t year, <a class="code hl_enumeration" href="group___s_t_m32_l051.html#gad0dda29812d725058aa738275ac5a89f">sRTC_day_t</a> weekDay)</div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>{</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>    <span class="comment">// Reset date register to default value</span></div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>    handle-&gt;DR = 0x00002101;</div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span> </div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>    <span class="comment">// Convert input values to BCD</span></div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>    day = dec2BCD(day);</div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>    month = dec2BCD(month);</div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>    year = dec2BCD(year);</div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span> </div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    <span class="comment">// Set RTC date</span></div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    handle-&gt;DR = (weekDay &lt;&lt; RTC_DR_WDU_Pos) | (day &lt;&lt; RTC_DR_DU_Pos) | (month &lt;&lt; RTC_DR_MU_Pos) | (year &lt;&lt; RTC_DR_YU_Pos);</div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>}</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span> </div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span><span class="keywordtype">void</span> sRTC::setTime(uint8_t hour, uint8_t minute, uint8_t second, <a class="code hl_enumeration" href="group___s_t_m32_l051.html#ga7e0be127844f914499e2d596b703bd26">sRTC_ampm_t</a> ampm)</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>{</div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>    <span class="comment">// Reset time register to default value</span></div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>    handle-&gt;TR = 0x00000000;</div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span> </div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    <span class="comment">// Convert input values to BCD</span></div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    hour = dec2BCD(hour);</div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>    minute = dec2BCD(minute);</div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>    second = dec2BCD(second);</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    <span class="comment">// Enable RTC backup register write protection</span></div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>    enableBackupWP();       </div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>}</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span> </div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno"><a class="line" href="classs_r_t_c.html#ad5ea8c0fed24200aceab265ee43bb52d">  219</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classs_r_t_c.html#ad5ea8c0fed24200aceab265ee43bb52d">sRTC::wakeupDisable</a>(<span class="keywordtype">void</span>)</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>{</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    <span class="comment">// Disable RTC backup register write protection</span></div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>    disableBackupWP();</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span> </div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>    <span class="comment">// Disable write protection</span></div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>    disableWP();</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span> </div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>    <span class="comment">// Disable wake up timer and its interrupt</span></div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>    handle-&gt;CR &amp;= ~(RTC_CR_WUTE | RTC_CR_WUTIE);</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span> </div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>    <span class="comment">// Reset wake up timer counter</span></div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>    handle-&gt;WUTR = 0;</div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span> </div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    <span class="comment">// Enable RTC write protection</span></div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    enableWP();</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span> </div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>    <span class="comment">// Enable RTC backup register write protection</span></div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    enableBackupWP();   </div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>}</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span> </div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno"><a class="line" href="classs_r_t_c.html#af6d8ca6836a7ffe62fbf3f5befc99109">  240</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="classs_r_t_c.html#af6d8ca6836a7ffe62fbf3f5befc99109">sRTC::calibrate</a>(<a class="code hl_enumeration" href="group___s_t_m32_l051.html#ga6a1941b79d1c56e223ad7ce159b7f07e">sRTC_cal_dir_t</a> direction, uint16_t value, <a class="code hl_enumeration" href="group___s_t_m32_l051.html#gac8d46bbcdb2a602236515e1f49bc245c">sRTC_cal_cycle_t</a> cycle)</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>{</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>    uint8_t calp = 0;</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    uint32_t calCycle = 0;</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span> </div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>    <span class="comment">// Disable RTC backup register write protection</span></div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>    disableBackupWP();</div>
 <div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span> </div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>    <span class="comment">// Set RTC time</span></div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>    handle-&gt;TR = (ampm &lt;&lt; RTC_TR_PM_Pos) | (hour &lt;&lt; RTC_TR_HU_Pos) | (minute &lt;&lt; RTC_TR_MNU_Pos) | (second &lt;&lt; RTC_TR_SU_Pos);</div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>}</div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span> </div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>uint8_t sRTC::getDay(uint32_t value)<span class="keyword"> const</span></div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span><span class="keyword"></span>{</div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>    <span class="keywordflow">return</span> BCD2Dec((value &amp; (RTC_DR_DT | RTC_DR_DU)) &gt;&gt; RTC_DR_DU_Pos);</div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>}</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>    <span class="comment">// Disable write protection</span></div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>    disableWP();</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span> </div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>    <span class="comment">// Enable init phase</span></div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>    enableInit();   </div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span> </div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>    <span class="comment">// Set CALP bit</span></div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>    <span class="keywordflow">if</span> (direction == sRTC_cal_dir_t::RTC_CAL_POSITIVE) calp = 1;</div>
 <div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span> </div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>uint8_t sRTC::getMonth(uint32_t value)<span class="keyword"> const</span></div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span><span class="keyword"></span>{</div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>    <span class="keywordflow">return</span> BCD2Dec((value &amp; (RTC_DR_MT | RTC_DR_MU)) &gt;&gt; RTC_DR_MU_Pos);</div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>}</div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span> </div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>uint8_t sRTC::getYear(uint32_t value)<span class="keyword"> const</span></div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span><span class="keyword"></span>{</div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>    <span class="keywordflow">return</span> BCD2Dec((value &amp; (RTC_DR_YT | RTC_DR_YU)) &gt;&gt; RTC_DR_YU_Pos);</div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>}</div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span> </div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>uint8_t sRTC::getHour(uint32_t value)<span class="keyword"> const</span></div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span><span class="keyword"></span>{</div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>    <span class="keywordflow">return</span> BCD2Dec((value &amp; (RTC_TR_HU | RTC_TR_HT)) &gt;&gt; RTC_TR_HU_Pos);</div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>}</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>    <span class="comment">// Set cycle bit and limit first two bits</span></div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>    <span class="keywordflow">if</span> (cycle == sRTC_cal_cycle_t::RTC_CAL_16S)</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>    {</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>        calCycle = RTC_CALR_CALW16;</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>        value &amp;= ~1;</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>    }</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (cycle == sRTC_cal_cycle_t::RTC_CAL_8S)</div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>    {</div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>        calCycle = RTC_CALR_CALW8;</div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>        value &amp;= ~3;</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>    }</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span> </div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>    <span class="comment">// Wait until it is allowed to do calibration</span></div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>    <span class="keywordflow">while</span> (handle-&gt;ISR &amp; RTC_ISR_RECALPF);</div>
 <div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span> </div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>uint8_t sRTC::getMinute(uint32_t value)<span class="keyword"> const</span></div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span><span class="keyword"></span>{</div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>    <span class="keywordflow">return</span> BCD2Dec((value &amp; (RTC_TR_MNU | RTC_TR_MNT)) &gt;&gt; RTC_TR_MNU_Pos);</div>
-<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>}</div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span> </div>
-<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>uint8_t sRTC::getSecond(uint32_t value)<span class="keyword"> const</span></div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span><span class="keyword"></span>{</div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>    <span class="keywordflow">return</span> BCD2Dec(value &amp; (RTC_TR_SU | RTC_TR_ST));</div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>}</div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span> </div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span> </div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span><span class="comment">// ----- STATIC FUNCTION DEFINITIONS</span></div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span><span class="keyword">static</span> uint8_t dec2BCD(uint8_t value)</div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>{</div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>    <span class="comment">// Return decimal value converted to BCD</span></div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>    <span class="keywordflow">return</span> (((value / 10) &lt;&lt; 4) + (value % 10));</div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>}</div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span> </div>
-<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span><span class="keyword">static</span> uint8_t BCD2Dec(uint8_t value)</div>
-<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>{</div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    <span class="comment">// Return BCD value converted to decimal</span></div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    <span class="keywordflow">return</span> (((value &gt;&gt; 4) * 10) + (value &amp; 0x0F));</div>
-<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>}</div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span> </div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>    <span class="comment">// Set CALR register</span></div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>    handle-&gt;CALR = 0 | (calp &lt;&lt; RTC_CALR_CALP_Pos) | value | calCycle;</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span> </div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>    <span class="comment">// Disable init phase</span></div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>    disableInit();</div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span> </div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>    <span class="comment">// Enable RTC write protection</span></div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>    enableWP();</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span> </div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>    <span class="comment">// Enable RTC backup register write protection</span></div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>    enableBackupWP();       </div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>}</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span> </div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span> </div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span><span class="comment">// ----- PRIVATE METHOD DEFINITIONS</span></div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span><span class="keywordtype">void</span> sRTC::setDate(uint8_t day, uint8_t month, uint8_t year, <a class="code hl_enumeration" href="group___s_t_m32_l051.html#gad0dda29812d725058aa738275ac5a89f">sRTC_day_t</a> weekDay)</div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>{</div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    <span class="comment">// Reset date register to default value</span></div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    handle-&gt;DR = 0x00002101;</div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span> </div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    <span class="comment">// Convert input values to BCD</span></div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    day = dec2BCD(day);</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>    month = dec2BCD(month);</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>    year = dec2BCD(year);</div>
 <div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span> </div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span><span class="comment">// END WITH NEW LINE</span></div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>    <span class="comment">// Set RTC date</span></div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    handle-&gt;DR = (weekDay &lt;&lt; RTC_DR_WDU_Pos) | (day &lt;&lt; RTC_DR_DU_Pos) | (month &lt;&lt; RTC_DR_MU_Pos) | (year &lt;&lt; RTC_DR_YU_Pos);</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>}</div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span> </div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span><span class="keywordtype">void</span> sRTC::setTime(uint8_t hour, uint8_t minute, uint8_t second, <a class="code hl_enumeration" href="group___s_t_m32_l051.html#ga7e0be127844f914499e2d596b703bd26">sRTC_ampm_t</a> ampm)</div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>{</div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>    <span class="comment">// Reset time register to default value</span></div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>    handle-&gt;TR = 0x00000000;</div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span> </div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>    <span class="comment">// Convert input values to BCD</span></div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>    hour = dec2BCD(hour);</div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>    minute = dec2BCD(minute);</div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>    second = dec2BCD(second);</div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span> </div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>    <span class="comment">// Set RTC time</span></div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>    handle-&gt;TR = (ampm &lt;&lt; RTC_TR_PM_Pos) | (hour &lt;&lt; RTC_TR_HU_Pos) | (minute &lt;&lt; RTC_TR_MNU_Pos) | (second &lt;&lt; RTC_TR_SU_Pos);</div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>}</div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span> </div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>uint8_t sRTC::getDay(uint32_t value)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span><span class="keyword"></span>{</div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>    <span class="keywordflow">return</span> BCD2Dec((value &amp; (RTC_DR_DT | RTC_DR_DU)) &gt;&gt; RTC_DR_DU_Pos);</div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>}</div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span> </div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>uint8_t sRTC::getMonth(uint32_t value)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span><span class="keyword"></span>{</div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>    <span class="keywordflow">return</span> BCD2Dec((value &amp; (RTC_DR_MT | RTC_DR_MU)) &gt;&gt; RTC_DR_MU_Pos);</div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>}</div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span> </div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>uint8_t sRTC::getYear(uint32_t value)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span><span class="keyword"></span>{</div>
+<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>    <span class="keywordflow">return</span> BCD2Dec((value &amp; (RTC_DR_YT | RTC_DR_YU)) &gt;&gt; RTC_DR_YU_Pos);</div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>}</div>
+<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span> </div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>uint8_t sRTC::getHour(uint32_t value)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span><span class="keyword"></span>{</div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>    <span class="keywordflow">return</span> BCD2Dec((value &amp; (RTC_TR_HU | RTC_TR_HT)) &gt;&gt; RTC_TR_HU_Pos);</div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>}</div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span> </div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>uint8_t sRTC::getMinute(uint32_t value)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span><span class="keyword"></span>{</div>
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>    <span class="keywordflow">return</span> BCD2Dec((value &amp; (RTC_TR_MNU | RTC_TR_MNT)) &gt;&gt; RTC_TR_MNU_Pos);</div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>}</div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span> </div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>uint8_t sRTC::getSecond(uint32_t value)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span><span class="keyword"></span>{</div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>    <span class="keywordflow">return</span> BCD2Dec(value &amp; (RTC_TR_SU | RTC_TR_ST));</div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>}</div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span> </div>
+<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span> </div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span><span class="comment">// ----- STATIC FUNCTION DEFINITIONS</span></div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span><span class="keyword">static</span> uint8_t dec2BCD(uint8_t value)</div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>{</div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>    <span class="comment">// Return decimal value converted to BCD</span></div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>    <span class="keywordflow">return</span> (((value / 10) &lt;&lt; 4) + (value % 10));</div>
+<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>}</div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span> </div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span><span class="keyword">static</span> uint8_t BCD2Dec(uint8_t value)</div>
+<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>{</div>
+<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>    <span class="comment">// Return BCD value converted to decimal</span></div>
+<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span>    <span class="keywordflow">return</span> (((value &gt;&gt; 4) * 10) + (value &amp; 0x0F));</div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>}</div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span> </div>
+<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span> </div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span><span class="comment">// END WITH NEW LINE</span></div>
+<div class="ttc" id="aclasss_r_t_c_html_a07c5d2eea55235eab4d8f62ae5043a79"><div class="ttname"><a href="classs_r_t_c.html#a07c5d2eea55235eab4d8f62ae5043a79">sRTC::wakeupStart</a></div><div class="ttdeci">void wakeupStart(uint16_t reloadValue)</div><div class="ttdoc">Start wake up timer.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8cpp_source.html#l00156">sRTC.cpp:156</a></div></div>
 <div class="ttc" id="aclasss_r_t_c_html_a2d64c250a5be2a6481fe368792ced815"><div class="ttname"><a href="classs_r_t_c.html#a2d64c250a5be2a6481fe368792ced815">sRTC::init</a></div><div class="ttdeci">void init(sRTC_time_format_t format, sRTC_time_t *time=nullptr, sRTC_mode_t mode=sRTC_mode_t::CONTINUE)</div><div class="ttdoc">Init RTC.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8cpp_source.html#l00063">sRTC.cpp:63</a></div></div>
 <div class="ttc" id="aclasss_r_t_c_html_a30d5f69c8865e813a8a64d215acb40b3"><div class="ttname"><a href="classs_r_t_c.html#a30d5f69c8865e813a8a64d215acb40b3">sRTC::get</a></div><div class="ttdeci">void get(uint8_t &amp;day, uint8_t &amp;month, uint8_t &amp;year, sRTC_day_t &amp;weekDay, uint8_t &amp;hour, uint8_t &amp;minute, uint8_t &amp;second, sRTC_ampm_t &amp;ampm) const</div><div class="ttdoc">Get time and date.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8cpp_source.html#l00138">sRTC.cpp:138</a></div></div>
-<div class="ttc" id="aclasss_r_t_c_html_a56cb1a0f465e1e56900bf9a964f1c6e6"><div class="ttname"><a href="classs_r_t_c.html#a56cb1a0f465e1e56900bf9a964f1c6e6">sRTC::disableWakeup</a></div><div class="ttdeci">void disableWakeup(void)</div><div class="ttdoc">Disable wake up timer.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8cpp_source.html#l00201">sRTC.cpp:201</a></div></div>
 <div class="ttc" id="aclasss_r_t_c_html_a64a97f5f63c463b86a4cf9e51400757c"><div class="ttname"><a href="classs_r_t_c.html#a64a97f5f63c463b86a4cf9e51400757c">sRTC::sRTC</a></div><div class="ttdeci">sRTC(RTC_TypeDef *rtcHandle)</div><div class="ttdoc">Object constructor.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8cpp_source.html#l00051">sRTC.cpp:51</a></div></div>
 <div class="ttc" id="aclasss_r_t_c_html_a9479626c243de0c4ef4756df8711ec39"><div class="ttname"><a href="classs_r_t_c.html#a9479626c243de0c4ef4756df8711ec39">sRTC::~sRTC</a></div><div class="ttdeci">~sRTC(void)</div><div class="ttdoc">Object deconstructor.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8cpp_source.html#l00057">sRTC.cpp:57</a></div></div>
 <div class="ttc" id="aclasss_r_t_c_html_a9b22551f8934daf997e63eb1fb26da99"><div class="ttname"><a href="classs_r_t_c.html#a9b22551f8934daf997e63eb1fb26da99">sRTC::set</a></div><div class="ttdeci">void set(uint8_t day, uint8_t month, uint8_t year, sRTC_day_t weekDay, uint8_t hour, uint8_t minute, uint8_t second, sRTC_ampm_t ampm=sRTC_ampm_t::AM)</div><div class="ttdoc">Set time and date.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8cpp_source.html#l00113">sRTC.cpp:113</a></div></div>
-<div class="ttc" id="aclasss_r_t_c_html_ae246a40171f537bb2171377646b79e38"><div class="ttname"><a href="classs_r_t_c.html#ae246a40171f537bb2171377646b79e38">sRTC::enableWakeup</a></div><div class="ttdeci">void enableWakeup(sRTC_WUT_clock_t clock, uint16_t reloadValue)</div><div class="ttdoc">Enable wake up timer.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8cpp_source.html#l00156">sRTC.cpp:156</a></div></div>
+<div class="ttc" id="aclasss_r_t_c_html_aacc34748bd5063444bef4c9c9b45ea74"><div class="ttname"><a href="classs_r_t_c.html#aacc34748bd5063444bef4c9c9b45ea74">sRTC::wakeupEnable</a></div><div class="ttdeci">void wakeupEnable(sRTC_WUT_clock_t clock)</div><div class="ttdoc">Enable wake up timer.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8cpp_source.html#l00180">sRTC.cpp:180</a></div></div>
+<div class="ttc" id="aclasss_r_t_c_html_ad5ea8c0fed24200aceab265ee43bb52d"><div class="ttname"><a href="classs_r_t_c.html#ad5ea8c0fed24200aceab265ee43bb52d">sRTC::wakeupDisable</a></div><div class="ttdeci">void wakeupDisable(void)</div><div class="ttdoc">Disable wake up timer.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8cpp_source.html#l00219">sRTC.cpp:219</a></div></div>
+<div class="ttc" id="aclasss_r_t_c_html_af6d8ca6836a7ffe62fbf3f5befc99109"><div class="ttname"><a href="classs_r_t_c.html#af6d8ca6836a7ffe62fbf3f5befc99109">sRTC::calibrate</a></div><div class="ttdeci">void calibrate(sRTC_cal_dir_t direction, uint16_t value, sRTC_cal_cycle_t cycle=sRTC_cal_cycle_t::RTC_CAL_32S)</div><div class="ttdoc">Calibrate RTC LSE clock.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8cpp_source.html#l00240">sRTC.cpp:240</a></div></div>
 <div class="ttc" id="agroup___s_t_m32_l051_html_ga00bcef9c8414b144d1d6e950ec41fab4"><div class="ttname"><a href="group___s_t_m32_l051.html#ga00bcef9c8414b144d1d6e950ec41fab4">sRTC_mode_t</a></div><div class="ttdeci">sRTC_mode_t</div><div class="ttdoc">RTC mode enum.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00078">sRTC.h:78</a></div></div>
 <div class="ttc" id="agroup___s_t_m32_l051_html_ga124114d956e520e14e3c92b516fddc51"><div class="ttname"><a href="group___s_t_m32_l051.html#ga124114d956e520e14e3c92b516fddc51">sRTC_time_format_t</a></div><div class="ttdeci">sRTC_time_format_t</div><div class="ttdoc">Time format enum.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00060">sRTC.h:60</a></div></div>
 <div class="ttc" id="agroup___s_t_m32_l051_html_ga43f26c46ff4bcdd7da07bd33df89385d"><div class="ttname"><a href="group___s_t_m32_l051.html#ga43f26c46ff4bcdd7da07bd33df89385d">sRTC_WUT_clock_t</a></div><div class="ttdeci">sRTC_WUT_clock_t</div><div class="ttdoc">RTC wake up timer clock selection.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00101">sRTC.h:101</a></div></div>
+<div class="ttc" id="agroup___s_t_m32_l051_html_ga6a1941b79d1c56e223ad7ce159b7f07e"><div class="ttname"><a href="group___s_t_m32_l051.html#ga6a1941b79d1c56e223ad7ce159b7f07e">sRTC_cal_dir_t</a></div><div class="ttdeci">sRTC_cal_dir_t</div><div class="ttdoc">RTC calibration direction enum.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00113">sRTC.h:113</a></div></div>
 <div class="ttc" id="agroup___s_t_m32_l051_html_ga7e0be127844f914499e2d596b703bd26"><div class="ttname"><a href="group___s_t_m32_l051.html#ga7e0be127844f914499e2d596b703bd26">sRTC_ampm_t</a></div><div class="ttdeci">sRTC_ampm_t</div><div class="ttdoc">Current time AM/PM enum.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00069">sRTC.h:69</a></div></div>
+<div class="ttc" id="agroup___s_t_m32_l051_html_gac8d46bbcdb2a602236515e1f49bc245c"><div class="ttname"><a href="group___s_t_m32_l051.html#gac8d46bbcdb2a602236515e1f49bc245c">sRTC_cal_cycle_t</a></div><div class="ttdeci">sRTC_cal_cycle_t</div><div class="ttdoc">RTC calibration cycle period enum.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00122">sRTC.h:122</a></div></div>
 <div class="ttc" id="agroup___s_t_m32_l051_html_gad0dda29812d725058aa738275ac5a89f"><div class="ttname"><a href="group___s_t_m32_l051.html#gad0dda29812d725058aa738275ac5a89f">sRTC_day_t</a></div><div class="ttdeci">sRTC_day_t</div><div class="ttdoc">RTC day enum.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00087">sRTC.h:87</a></div></div>
 <div class="ttc" id="as_r_t_c_8h_html"><div class="ttname"><a href="s_r_t_c_8h.html">sRTC.h</a></div><div class="ttdoc">Simple RTC driver header file.</div></div>
-<div class="ttc" id="astructs_r_t_c__time__t_html"><div class="ttname"><a href="structs_r_t_c__time__t.html">sRTC_time_t</a></div><div class="ttdoc">RTC time struct.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00116">sRTC.h:116</a></div></div>
-<div class="ttc" id="astructs_r_t_c__time__t_html_a0c637a2cff66a2aad5fe90bba2baa452"><div class="ttname"><a href="structs_r_t_c__time__t.html#a0c637a2cff66a2aad5fe90bba2baa452">sRTC_time_t::second</a></div><div class="ttdeci">uint8_t second</div><div class="ttdoc">Second stored as decimal value.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00129">sRTC.h:129</a></div></div>
-<div class="ttc" id="astructs_r_t_c__time__t_html_a3f6119bf36197d8ec97021ff239a2c40"><div class="ttname"><a href="structs_r_t_c__time__t.html#a3f6119bf36197d8ec97021ff239a2c40">sRTC_time_t::hour</a></div><div class="ttdeci">uint8_t hour</div><div class="ttdoc">Hour stored as decimal value.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00127">sRTC.h:127</a></div></div>
-<div class="ttc" id="astructs_r_t_c__time__t_html_a4aa0c23f0d62f7cfebfaff96ade9f5fb"><div class="ttname"><a href="structs_r_t_c__time__t.html#a4aa0c23f0d62f7cfebfaff96ade9f5fb">sRTC_time_t::weekDay</a></div><div class="ttdeci">sRTC_day_t weekDay</div><div class="ttdoc">Day of the week. See sRTC_day_t.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00117">sRTC.h:117</a></div></div>
-<div class="ttc" id="astructs_r_t_c__time__t_html_a568848904ff3e1ee932860ccc85f8dec"><div class="ttname"><a href="structs_r_t_c__time__t.html#a568848904ff3e1ee932860ccc85f8dec">sRTC_time_t::day</a></div><div class="ttdeci">uint8_t day</div><div class="ttdoc">Day stored as decimal value.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00118">sRTC.h:118</a></div></div>
-<div class="ttc" id="astructs_r_t_c__time__t_html_a75f000f54095f64268d8fe175c746967"><div class="ttname"><a href="structs_r_t_c__time__t.html#a75f000f54095f64268d8fe175c746967">sRTC_time_t::month</a></div><div class="ttdeci">uint8_t month</div><div class="ttdoc">Month stored as decimal value.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00119">sRTC.h:119</a></div></div>
-<div class="ttc" id="astructs_r_t_c__time__t_html_a86db266fe3f0b1b58af72214087c3a59"><div class="ttname"><a href="structs_r_t_c__time__t.html#a86db266fe3f0b1b58af72214087c3a59">sRTC_time_t::minute</a></div><div class="ttdeci">uint8_t minute</div><div class="ttdoc">Minute stored as decimal value.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00128">sRTC.h:128</a></div></div>
-<div class="ttc" id="astructs_r_t_c__time__t_html_ad9c91b527fc23116697c20925e34a881"><div class="ttname"><a href="structs_r_t_c__time__t.html#ad9c91b527fc23116697c20925e34a881">sRTC_time_t::year</a></div><div class="ttdeci">uint8_t year</div><div class="ttdoc">Year stored as decimal value.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00126">sRTC.h:126</a></div></div>
-<div class="ttc" id="astructs_r_t_c__time__t_html_adc9ca4171f75af98b1544b3ae60b7ffe"><div class="ttname"><a href="structs_r_t_c__time__t.html#adc9ca4171f75af98b1544b3ae60b7ffe">sRTC_time_t::ampm</a></div><div class="ttdeci">sRTC_ampm_t ampm</div><div class="ttdoc">Current time AM/PM. Optional. See sRTC_ampm_t.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00130">sRTC.h:130</a></div></div>
+<div class="ttc" id="astructs_r_t_c__time__t_html"><div class="ttname"><a href="structs_r_t_c__time__t.html">sRTC_time_t</a></div><div class="ttdoc">RTC time struct.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00135">sRTC.h:135</a></div></div>
+<div class="ttc" id="astructs_r_t_c__time__t_html_a0c637a2cff66a2aad5fe90bba2baa452"><div class="ttname"><a href="structs_r_t_c__time__t.html#a0c637a2cff66a2aad5fe90bba2baa452">sRTC_time_t::second</a></div><div class="ttdeci">uint8_t second</div><div class="ttdoc">Second stored as decimal value.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00148">sRTC.h:148</a></div></div>
+<div class="ttc" id="astructs_r_t_c__time__t_html_a3f6119bf36197d8ec97021ff239a2c40"><div class="ttname"><a href="structs_r_t_c__time__t.html#a3f6119bf36197d8ec97021ff239a2c40">sRTC_time_t::hour</a></div><div class="ttdeci">uint8_t hour</div><div class="ttdoc">Hour stored as decimal value.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00146">sRTC.h:146</a></div></div>
+<div class="ttc" id="astructs_r_t_c__time__t_html_a4aa0c23f0d62f7cfebfaff96ade9f5fb"><div class="ttname"><a href="structs_r_t_c__time__t.html#a4aa0c23f0d62f7cfebfaff96ade9f5fb">sRTC_time_t::weekDay</a></div><div class="ttdeci">sRTC_day_t weekDay</div><div class="ttdoc">Day of the week. See sRTC_day_t.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00136">sRTC.h:136</a></div></div>
+<div class="ttc" id="astructs_r_t_c__time__t_html_a568848904ff3e1ee932860ccc85f8dec"><div class="ttname"><a href="structs_r_t_c__time__t.html#a568848904ff3e1ee932860ccc85f8dec">sRTC_time_t::day</a></div><div class="ttdeci">uint8_t day</div><div class="ttdoc">Day stored as decimal value.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00137">sRTC.h:137</a></div></div>
+<div class="ttc" id="astructs_r_t_c__time__t_html_a75f000f54095f64268d8fe175c746967"><div class="ttname"><a href="structs_r_t_c__time__t.html#a75f000f54095f64268d8fe175c746967">sRTC_time_t::month</a></div><div class="ttdeci">uint8_t month</div><div class="ttdoc">Month stored as decimal value.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00138">sRTC.h:138</a></div></div>
+<div class="ttc" id="astructs_r_t_c__time__t_html_a86db266fe3f0b1b58af72214087c3a59"><div class="ttname"><a href="structs_r_t_c__time__t.html#a86db266fe3f0b1b58af72214087c3a59">sRTC_time_t::minute</a></div><div class="ttdeci">uint8_t minute</div><div class="ttdoc">Minute stored as decimal value.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00147">sRTC.h:147</a></div></div>
+<div class="ttc" id="astructs_r_t_c__time__t_html_ad9c91b527fc23116697c20925e34a881"><div class="ttname"><a href="structs_r_t_c__time__t.html#ad9c91b527fc23116697c20925e34a881">sRTC_time_t::year</a></div><div class="ttdeci">uint8_t year</div><div class="ttdoc">Year stored as decimal value.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00145">sRTC.h:145</a></div></div>
+<div class="ttc" id="astructs_r_t_c__time__t_html_adc9ca4171f75af98b1544b3ae60b7ffe"><div class="ttname"><a href="structs_r_t_c__time__t.html#adc9ca4171f75af98b1544b3ae60b7ffe">sRTC_time_t::ampm</a></div><div class="ttdeci">sRTC_ampm_t ampm</div><div class="ttdoc">Current time AM/PM. Optional. See sRTC_ampm_t.</div><div class="ttdef"><b>Definition:</b> <a href="s_r_t_c_8h_source.html#l00149">sRTC.h:149</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="s_r_t_c_8cpp.html">sRTC.cpp</a></li>
-    <li class="footer">Generated on Sun Jan 22 2023 00:59:58 for Simple RTC by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5 </li>
+    <li class="footer">Generated on Sun Mar 12 2023 21:02:59 for Simple RTC by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5 </li>
   </ul>
 </div>
 </body>
