@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['halt_0',['HALT',['../group___s_t_m32_l051.html#gga00bcef9c8414b144d1d6e950ec41fab4aa2fd6bbb0c07e28e835ba595e64df78c',1,'sRTC.h']]],
-  ['hour_1',['hour',['../structs_r_t_c__time__t.html#a3f6119bf36197d8ec97021ff239a2c40',1,'sRTC_time_t']]]
+  ['init_0',['init',['../classs_r_t_c.html#a2d64c250a5be2a6481fe368792ced815',1,'sRTC']]],
+  ['isset_1',['isSet',['../classs_r_t_c.html#a280e900ebd2261174169bcc47a3a120e',1,'sRTC']]]
 ];

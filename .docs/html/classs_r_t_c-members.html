@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Simple RTC<span id="projectnumber">&#160;v1.0r1</span>
+   <div id="projectname">Simple RTC<span id="projectnumber">&#160;v1.0r2</span>
    </div>
    <div id="projectbrief">Simple RTC driver written in C++ for STM32 &amp; nRF52</div>
   </td>
@@ -97,22 +97,24 @@ $(document).ready(function(){initNavTree('classs_r_t_c.html',''); initResizable(
 
 <p>This is the complete list of members for <a class="el" href="classs_r_t_c.html">sRTC</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="classs_r_t_c.html#a56cb1a0f465e1e56900bf9a964f1c6e6">disableWakeup</a>(void)</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="classs_r_t_c.html#ae246a40171f537bb2171377646b79e38">enableWakeup</a>(sRTC_WUT_clock_t clock, uint16_t reloadValue)</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classs_r_t_c.html#a30d5f69c8865e813a8a64d215acb40b3">get</a>(uint8_t &amp;day, uint8_t &amp;month, uint8_t &amp;year, sRTC_day_t &amp;weekDay, uint8_t &amp;hour, uint8_t &amp;minute, uint8_t &amp;second, sRTC_ampm_t &amp;ampm) const</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="classs_r_t_c.html#a6142c7952b3dc4f3405c4814f46e8aca">get</a>(sRTC_time_t &amp;time) const</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classs_r_t_c.html#a2d64c250a5be2a6481fe368792ced815">init</a>(sRTC_time_format_t format, sRTC_time_t *time=nullptr, sRTC_mode_t mode=sRTC_mode_t::CONTINUE)</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="classs_r_t_c.html#a280e900ebd2261174169bcc47a3a120e">isSet</a>(void) const</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classs_r_t_c.html#a9b22551f8934daf997e63eb1fb26da99">set</a>(uint8_t day, uint8_t month, uint8_t year, sRTC_day_t weekDay, uint8_t hour, uint8_t minute, uint8_t second, sRTC_ampm_t ampm=sRTC_ampm_t::AM)</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="classs_r_t_c.html#a6c7ed14734b710ee97cd0cce3720d15f">set</a>(sRTC_time_t &amp;time)</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classs_r_t_c.html#a64a97f5f63c463b86a4cf9e51400757c">sRTC</a>(RTC_TypeDef *rtcHandle)</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classs_r_t_c.html#af6d8ca6836a7ffe62fbf3f5befc99109">calibrate</a>(sRTC_cal_dir_t direction, uint16_t value, sRTC_cal_cycle_t cycle=sRTC_cal_cycle_t::RTC_CAL_32S)</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="classs_r_t_c.html#a30d5f69c8865e813a8a64d215acb40b3">get</a>(uint8_t &amp;day, uint8_t &amp;month, uint8_t &amp;year, sRTC_day_t &amp;weekDay, uint8_t &amp;hour, uint8_t &amp;minute, uint8_t &amp;second, sRTC_ampm_t &amp;ampm) const</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classs_r_t_c.html#a6142c7952b3dc4f3405c4814f46e8aca">get</a>(sRTC_time_t &amp;time) const</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="classs_r_t_c.html#a2d64c250a5be2a6481fe368792ced815">init</a>(sRTC_time_format_t format, sRTC_time_t *time=nullptr, sRTC_mode_t mode=sRTC_mode_t::CONTINUE)</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classs_r_t_c.html#a280e900ebd2261174169bcc47a3a120e">isSet</a>(void) const</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="classs_r_t_c.html#a9b22551f8934daf997e63eb1fb26da99">set</a>(uint8_t day, uint8_t month, uint8_t year, sRTC_day_t weekDay, uint8_t hour, uint8_t minute, uint8_t second, sRTC_ampm_t ampm=sRTC_ampm_t::AM)</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classs_r_t_c.html#a6c7ed14734b710ee97cd0cce3720d15f">set</a>(sRTC_time_t &amp;time)</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="classs_r_t_c.html#a64a97f5f63c463b86a4cf9e51400757c">sRTC</a>(RTC_TypeDef *rtcHandle)</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classs_r_t_c.html#ad5ea8c0fed24200aceab265ee43bb52d">wakeupDisable</a>(void)</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="classs_r_t_c.html#aacc34748bd5063444bef4c9c9b45ea74">wakeupEnable</a>(sRTC_WUT_clock_t clock)</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classs_r_t_c.html#a07c5d2eea55235eab4d8f62ae5043a79">wakeupStart</a>(uint16_t reloadValue)</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"></td></tr>
   <tr class="odd"><td class="entry"><a class="el" href="classs_r_t_c.html#a9479626c243de0c4ef4756df8711ec39">~sRTC</a>(void)</td><td class="entry"><a class="el" href="classs_r_t_c.html">sRTC</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun Jan 22 2023 00:59:59 for Simple RTC by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5 </li>
+    <li class="footer">Generated on Sun Mar 12 2023 21:03:00 for Simple RTC by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5 </li>
   </ul>
 </div>
 </body>

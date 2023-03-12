@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['year_0',['year',['../structs_r_t_c__time__t.html#ad9c91b527fc23116697c20925e34a881',1,'sRTC_time_t']]]
+  ['_7esrtc_0',['~sRTC',['../classs_r_t_c.html#a9479626c243de0c4ef4756df8711ec39',1,'sRTC']]]
 ];

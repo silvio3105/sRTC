@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['minute_0',['minute',['../structs_r_t_c__time__t.html#a86db266fe3f0b1b58af72214087c3a59',1,'sRTC_time_t']]],
-  ['month_1',['month',['../structs_r_t_c__time__t.html#a75f000f54095f64268d8fe175c746967',1,'sRTC_time_t']]]
+  ['pm_0',['PM',['../group___s_t_m32_l051.html#gga7e0be127844f914499e2d596b703bd26a4e84ba06a563492b48e6b6e25dd85c2d',1,'sRTC.h']]]
 ];

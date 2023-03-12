@@ -7,6 +7,15 @@ var s_r_t_c_8h =
       [ "AM", "group___s_t_m32_l051.html#gga7e0be127844f914499e2d596b703bd26a6b42f038a5963a2f1038abfb71f79109", null ],
       [ "PM", "group___s_t_m32_l051.html#gga7e0be127844f914499e2d596b703bd26a4e84ba06a563492b48e6b6e25dd85c2d", null ]
     ] ],
+    [ "sRTC_cal_cycle_t", "group___s_t_m32_l051.html#gac8d46bbcdb2a602236515e1f49bc245c", [
+      [ "RTC_CAL_32S", "group___s_t_m32_l051.html#ggac8d46bbcdb2a602236515e1f49bc245cac60e912256ba8a38e1176ee64670c5b0", null ],
+      [ "RTC_CAL_16S", "group___s_t_m32_l051.html#ggac8d46bbcdb2a602236515e1f49bc245ca88014f7d5c6a80b30fdbb02986ffba4b", null ],
+      [ "RTC_CAL_8S", "group___s_t_m32_l051.html#ggac8d46bbcdb2a602236515e1f49bc245cac826ec26dbb198c3de3b17b925d19446", null ]
+    ] ],
+    [ "sRTC_cal_dir_t", "group___s_t_m32_l051.html#ga6a1941b79d1c56e223ad7ce159b7f07e", [
+      [ "RTC_CAL_NEGATIVE", "group___s_t_m32_l051.html#gga6a1941b79d1c56e223ad7ce159b7f07eab6121e09d113ff871b93b2fc5421d953", null ],
+      [ "RTC_CAL_POSITIVE", "group___s_t_m32_l051.html#gga6a1941b79d1c56e223ad7ce159b7f07eac00ea0e7cbbd4ad313c98e4a36659d65", null ]
+    ] ],
     [ "sRTC_day_t", "group___s_t_m32_l051.html#gad0dda29812d725058aa738275ac5a89f", [
       [ "MONDAY", "group___s_t_m32_l051.html#ggad0dda29812d725058aa738275ac5a89fac82db3248a96794aaefb922ea5fb293c", null ],
       [ "TUESDAY", "group___s_t_m32_l051.html#ggad0dda29812d725058aa738275ac5a89fa347c4455723bb1bc2709647607a2b282", null ],

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['enablewakeup_0',['enableWakeup',['../classs_r_t_c.html#ae246a40171f537bb2171377646b79e38',1,'sRTC']]]
+  ['format_5f24h_0',['FORMAT_24H',['../group___s_t_m32_l051.html#gga124114d956e520e14e3c92b516fddc51ac6d00e790210cc73eebc349ffe3cbfde',1,'sRTC.h']]]
 ];
